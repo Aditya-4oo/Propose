@@ -1,0 +1,451 @@
+/* ============================================================
+   DESIGN TOKENS
+   Palette:
+     --void        #05030a  (near-black base)
+     --deep-plum   #1a0b2e  (gradient depth)
+     --neon-pink   #ff2f92
+     --neon-purple #a259ff
+     --moon-white  #f5f0ff
+     --gold        #ffd66b  (used sparingly: "forever" / countdown)
+   Type:
+     Great Vibes        -> romantic script, headlines only, used with restraint
+     Cormorant Garamond  -> elegant serif body / letter copy
+     Space Grotesk       -> structural: labels, countdown, buttons
+   ============================================================ */
+
+:root{
+  --void: #05030a;
+  --deep-plum: #1a0b2e;
+  --neon-pink: #ff2f92;
+  --neon-purple: #a259ff;
+  --moon-white: #f5f0ff;
+  --gold: #ffd66b;
+}
+
+*{ box-sizing: border-box; }
+
+html, body{
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  overflow-x:hidden;
+  background: var(--void);
+  color: var(--moon-white);
+  font-family: 'Cormorant Garamond', serif;
+}
+
+/* animated black -> deep purple gradient wash, sits under the canvas */
+body{
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(162,89,255,0.16), transparent 55%),
+    radial-gradient(ellipse at 75% 80%, rgba(255,47,146,0.14), transparent 55%),
+    linear-gradient(160deg, #030106 0%, #0b0417 35%, #1a0b2e 65%, #0a0512 100%);
+  background-size: 200% 200%;
+  animation: bgDrift 22s ease-in-out infinite;
+}
+@keyframes bgDrift{
+  0%{ background-position: 0% 30%; }
+  50%{ background-position: 100% 70%; }
+  100%{ background-position: 0% 30%; }
+}
+
+#scene-canvas{
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ============================================================
+   GLASSMORPHISM
+   ============================================================ */
+.glass-card{
+  position: relative;
+  background: rgba(20, 10, 30, 0.45);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 24px;
+  padding: 2.4rem 2.2rem;
+  box-shadow:
+    0 0 0 1px rgba(255,47,146,0.08),
+    0 0 40px rgba(162,89,255,0.18),
+    0 20px 60px rgba(0,0,0,0.55);
+  max-width: 460px;
+  width: 92%;
+  text-align: center;
+}
+.glass-card::before{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  border-radius: 24px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,47,146,0.55), rgba(162,89,255,0.15), rgba(255,47,146,0.4));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+/* ============================================================
+   LAYOUT / SCREENS
+   ============================================================ */
+.screen{
+  position: relative;
+  z-index: 3;
+  min-height: 100svh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem 1rem;
+  transition: opacity 0.8s ease;
+}
+
+.stage-inner{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.8rem, 2vh, 1.35rem);
+  width: 100%;
+  /* Keep the letter and buttons on screen while leaving room for the heart. */
+  padding-top: clamp(220px, 34vh, 310px);
+  padding-bottom: 1.25rem;
+}
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+.script-heading{
+  font-family: 'Great Vibes', cursive;
+  font-weight: 400;
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  margin: 0.2rem 0 0.6rem;
+  color: var(--moon-white);
+  text-shadow: 0 0 12px rgba(255,47,146,0.55), 0 0 30px rgba(162,89,255,0.35);
+}
+.eyebrow{
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--neon-pink);
+  margin: 0 0 0.4rem;
+  opacity: 0.85;
+}
+.sub-copy{
+  font-size: 1.05rem;
+  color: rgba(245,240,255,0.75);
+  margin: 0 0 1.6rem;
+  line-height: 1.5;
+}
+.glow-text{
+  text-shadow: 0 0 10px rgba(255,47,146,0.7), 0 0 26px rgba(162,89,255,0.5);
+}
+
+/* ============================================================
+   FORM FIELDS (gate screen)
+   ============================================================ */
+.field{
+  display:block;
+  text-align:left;
+  margin-bottom: 1.1rem;
+}
+.field span{
+  display:block;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(245,240,255,0.6);
+  margin-bottom: 0.35rem;
+}
+.field input{
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.05);
+  color: var(--moon-white);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  outline: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+.field input:focus{
+  border-color: var(--neon-pink);
+  background: rgba(255,47,146,0.06);
+  box-shadow: 0 0 0 3px rgba(255,47,146,0.18);
+}
+
+.gate-error{
+  color: #ff9bcb;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.95rem;
+  margin: 1rem 0 0.6rem;
+  line-height: 1.6;
+}
+.gate-error small{
+  color: rgba(245,240,255,0.6);
+  font-size: 0.8rem;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn{
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  padding: 0.85rem 1.8rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  color: var(--moon-white);
+  transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+.btn:focus-visible{
+  outline: 3px solid var(--gold);
+  outline-offset: 4px;
+}
+.btn:active{ transform: scale(0.96); }
+
+.btn-primary{
+  background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+  box-shadow: 0 0 18px rgba(255,47,146,0.55), 0 0 40px rgba(162,89,255,0.3);
+  width: 100%;
+  margin-top: 0.4rem;
+}
+.btn-primary:hover{
+  box-shadow: 0 0 26px rgba(255,47,146,0.8), 0 0 55px rgba(162,89,255,0.5);
+  transform: translateY(-2px);
+}
+
+.btn-ghost{
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.25);
+  margin-top: 0.9rem;
+}
+.btn-ghost:hover{ border-color: var(--neon-pink); }
+
+.decision-row{
+  display:flex;
+  gap: 1.4rem;
+  flex-wrap: wrap;
+  justify-content:center;
+  position: relative;
+  min-height: 76px;
+  width: 100%;
+  z-index: 6;
+}
+.btn-yes{
+  background: linear-gradient(135deg, #ff2f92, #ff6fb5);
+  box-shadow: 0 0 20px rgba(255,47,146,0.6), 0 0 46px rgba(255,47,146,0.3);
+  font-size: 1.1rem;
+  padding: 1rem 2.2rem;
+}
+.btn-yes:hover{ box-shadow: 0 0 30px rgba(255,47,146,0.9), 0 0 60px rgba(255,47,146,0.5); transform: translateY(-2px); }
+
+.btn-no{
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(162,89,255,0.4);
+  font-size: 1.1rem;
+  padding: 1rem 2.2rem;
+  position: relative;
+  transition: transform 0.18s ease, left 0.18s ease, top 0.18s ease;
+}
+
+.no-taunt{
+  min-height: 1.6rem;
+  font-family: 'Space Grotesk', sans-serif;
+  color: #ffb3d9;
+  font-size: 0.95rem;
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* ============================================================
+   MESSAGE CARD / TYPEWRITER
+   ============================================================ */
+.message-card{
+  max-width: 560px;
+  width: min(92%, 560px);
+}
+.typewriter{
+  font-size: clamp(1.05rem, 2.6vw, 1.4rem);
+  line-height: 1.55;
+  white-space: pre-line;
+  color: var(--moon-white);
+  margin: 0;
+  min-height: 6.5rem;
+}
+.typewriter .cursor{
+  display:inline-block;
+  width: 2px;
+  background: var(--neon-pink);
+  margin-left: 2px;
+  animation: blink 0.9s steps(1) infinite;
+}
+@keyframes blink{ 50%{ opacity: 0; } }
+
+/* ============================================================
+   CELEBRATION
+   ============================================================ */
+.celebration{
+  text-align: center;
+}
+.countdown-line{
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: 0.06em;
+  color: var(--gold);
+  text-shadow: 0 0 14px rgba(255,214,107,0.6);
+  font-size: 1.2rem;
+  margin-top: -0.3rem;
+}
+.final-line{ margin-top: 1.4rem; }
+
+/* ============================================================
+   MUSIC FAB
+   ============================================================ */
+.music-fab{
+  position: fixed;
+  bottom: 1.6rem;
+  right: 1.6rem;
+  z-index: 20;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(20,10,30,0.6);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(255,47,146,0.4);
+  color: var(--moon-white);
+  font-size: 1.3rem;
+  cursor: pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  animation: musicPulse 3s ease-in-out infinite;
+}
+@keyframes musicPulse{
+  0%,100%{ box-shadow: 0 0 16px rgba(255,47,146,0.35); }
+  50%{ box-shadow: 0 0 26px rgba(162,89,255,0.55); }
+}
+
+/* ============================================================
+   ROSE PETALS
+   ============================================================ */
+#petal-field{
+  position: fixed;
+  inset:0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+.petal{
+  position:absolute;
+  top: -5%;
+  font-size: 1.2rem;
+  opacity: 0.8;
+  animation-name: petalFall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  filter: drop-shadow(0 0 6px rgba(255,47,146,0.4));
+}
+@keyframes petalFall{
+  0%{ transform: translateY(-10vh) translateX(0) rotate(0deg); }
+  100%{ transform: translateY(110vh) translateX(var(--drift, 40px)) rotate(360deg); }
+}
+
+/* ============================================================
+   BALLOONS (finale only)
+   ============================================================ */
+#balloon-field{
+  position: fixed;
+  inset:0;
+  z-index: 8;
+  pointer-events:none;
+  overflow:hidden;
+}
+.balloon{
+  position:absolute;
+  bottom: -20%;
+  width: 42px;
+  height: 54px;
+  border-radius: 50% 50% 48% 48%;
+  animation-name: balloonRise;
+  animation-timing-function: ease-in;
+  animation-iteration-count: infinite;
+  box-shadow: inset -8px -8px 14px rgba(0,0,0,0.25), 0 0 16px rgba(255,255,255,0.15);
+}
+.balloon::after{
+  content:"";
+  position:absolute;
+  left: 50%;
+  bottom: -34px;
+  width: 1px;
+  height: 34px;
+  background: rgba(255,255,255,0.4);
+}
+@keyframes balloonRise{
+  0%{ transform: translateY(0) translateX(0); opacity: 0.95; }
+  100%{ transform: translateY(-125vh) translateX(var(--sway, 60px)); opacity: 0.9; }
+}
+
+/* ============================================================
+   RESPONSIVE TWEAKS
+   ============================================================ */
+@media (max-width: 480px){
+  .glass-card{ padding: 1.6rem 1.2rem; }
+  .stage-inner{ padding-top: clamp(185px, 29vh, 235px); gap: 0.85rem; }
+  .message-card{ width: 96%; }
+  .typewriter{ font-size: 1.02rem; line-height: 1.45; min-height: 5.8rem; }
+  .decision-row{ gap: 1rem; }
+  .btn-yes, .btn-no{ padding: 0.85rem 1.6rem; font-size: 1rem; }
+  .music-fab{ bottom: 1rem; right: 1rem; width: 48px; height: 48px; }
+}
+
+@media (max-height: 700px) and (min-width: 481px){
+  .stage-inner{ padding-top: 205px; }
+  .typewriter{ line-height: 1.45; min-height: 5.8rem; }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+
+/* Keep proposal content on one screen */
+#stage-screen{
+  height: 100svh;
+  min-height: 100svh;
+  overflow: hidden;
+  align-items: flex-start;
+}
+
+#stage-screen .stage-inner{
+  padding-top: clamp(170px, 28vh, 260px);
+  padding-bottom: 0;
+}
+
+@media (max-width: 480px){
+  #stage-screen .stage-inner{
+    padding-top: clamp(155px, 25vh, 200px);
+    gap: 0.7rem;
+  }
+
+  #stage-screen .message-card{
+    padding: 1rem 1.15rem;
+  }
+
+  #stage-screen .typewriter{
+    font-size: 0.96rem;
+    line-height: 1.35;
+    min-height: 0;
+  }
+}

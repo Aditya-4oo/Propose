@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+<title>Forever &mdash; A Question for Riya</title>
+
+<!-- Fonts: Great Vibes for the romantic cursive headline voice, Cormorant for elegant serif body,
+     Space Grotesk for the countdown/structural numerals -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ================= LAYER 0: full-bleed canvas for stars / particles / heart / fireworks ================= -->
+  <canvas id="scene-canvas"></canvas>
+
+  <!-- ================= LAYER 1: floating rose petals (DOM, lightweight CSS-driven) ================= -->
+  <div id="petal-field" aria-hidden="true"></div>
+
+  <!-- ================= LAYER 2: floating balloons for the finale (DOM) ================= -->
+  <div id="balloon-field" aria-hidden="true"></div>
+
+  <!-- ================= SCREEN A: the secret gate ================= -->
+  <main id="gate-screen" class="screen">
+    <div class="glass-card gate-card">
+      <p class="eyebrow">A locked letter</p>
+      <h1 class="script-heading">Only she may open this</h1>
+      <p class="sub-copy">Answer truthfully, and the letter will unlock itself.</p>
+
+      <form id="gate-form" autocomplete="off">
+        <label class="field">
+          <span>Your name</span>
+          <input type="text" id="in-name" placeholder="Enter your name" required />
+        </label>
+        <label class="field">
+          <span>My code name for you</span>
+          <input type="text" id="in-code" placeholder="You know this one" required />
+        </label>
+        <label class="field">
+          <span>Our secret password</span>
+          <input type="password" id="in-pass" placeholder="Whisper it here" required />
+        </label>
+
+        <button type="submit" class="btn btn-primary" id="unlock-btn">
+          <span>Unlock the letter</span>
+        </button>
+      </form>
+
+      <p id="gate-error" class="gate-error" hidden>
+        Access Denied ❤️<br />
+        <small>Only the special person knows the secret.</small>
+      </p>
+      <button id="retry-btn" class="btn btn-ghost" hidden>Try again</button>
+    </div>
+  </main>
+
+  <!-- ================= SCREEN B: dark pre-show with the Start button ================= -->
+  <section id="start-screen" class="screen" hidden>
+    <div class="glass-card start-card">
+      <p class="eyebrow">For Riya</p>
+      <h2 class="script-heading">Close your eyes for a second...</h2>
+      <p class="sub-copy">Then press start, and let the night light up.</p>
+      <button id="start-btn" class="btn btn-primary">
+        <span>Start</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ================= SCREEN C: the proposal stage ================= -->
+  <section id="stage-screen" class="screen" hidden>
+
+    <!-- floating music toggle, always accessible -->
+    <button id="music-btn" class="music-fab" aria-label="Toggle music" hidden>
+      <span id="music-icon">🎵</span>
+    </button>
+
+    <div class="stage-inner">
+
+      <!-- typewriter message, appears once heart finishes drawing -->
+      <div id="message-card" class="glass-card message-card" hidden>
+        <p id="typewriter" class="typewriter"></p>
+      </div>
+
+      <!-- decision buttons -->
+      <div id="decision-row" class="decision-row" hidden>
+        <button id="yes-btn" class="btn btn-yes">💖 Yes</button>
+        <button id="no-btn" class="btn btn-no">💔 No</button>
+      </div>
+
+      <!-- playful message that appears when "No" is prodded -->
+      <p id="no-taunt" class="no-taunt" aria-live="polite"></p>
+
+      <!-- celebration copy, shown after Yes -->
+      <div id="celebration" class="celebration" hidden>
+        <h2 class="script-heading glow-text">I knew you'd say YES ❤️</h2>
+        <p id="countdown-line" class="countdown-line">Forever starts today.</p>
+        <h3 class="script-heading glow-text final-line" id="final-line" hidden>Love You Forever ❤️</h3>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- background song: starts after the visitor presses Start -->
+  <audio id="background-music" src="music.mp3" preload="auto" loop></audio>
+  <script src="script.js"></script>
+</body>
+</html>
